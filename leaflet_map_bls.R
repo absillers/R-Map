@@ -17,6 +17,7 @@ msa_employment_2025 <- msa_employment_2025 %>%
   mutate(GEOID = as.character(GEOID)) %>%
   left_join(my_shapefile[c(4,10)], by = 'GEOID')%>%
   filter(!is.na(GEOID)) %>%
+  filter(!is.na(Percent)) %>%
   st_as_sf(sf_column_name  = "geometry") %>%
   st_transform(4326)
 
@@ -69,17 +70,17 @@ server <- function(input, output, session) {
     
     # 1. Define color palette dynamically based on the range of the selected metric
     pal <- colorNumeric(
-      palette = "YlOrRd", 
-      domain = selected_metric
+      palette = "magma",
+      domain = selected_metric,
+      reverse = TRUE
     )
     
     # 2. Build interactive dynamic labels
     labels <- sprintf(
-      "<strong>%s</strong><br/>%s: %s",
+      "<strong>%s</strong><br/>%s&percnt;",
       msa_employment_2025$Area[msa_employment_2025$Occupation == input$metric], 
-      input$metric, 
       round(selected_metric, 2)
-    ) %>% lapply(htmltools::HTML)
+    ) %>% lapply(HTML)
     
     # 3. Update the existing map instance using proxy
     leafletProxy("map", data = msa_employment_2025[msa_employment_2025$Occupation == input$metric,]) %>%
@@ -87,15 +88,13 @@ server <- function(input, output, session) {
       clearControls() %>% # Clear older legends
       addPolygons(
         fillColor = ~pal(selected_metric),
-        weight = 2,
+        weight = 1,
         opacity = 1,
-        color = "white",
-        dashArray = "3",
+        color = "#667",
         fillOpacity = 0.7,
         highlightOptions = highlightOptions(
-          weight = 5,
-          color = "#666",
-          dashArray = "",
+          weight = 1,
+          color = "#667",
           fillOpacity = 0.7,
           bringToFront = TRUE
         ),
