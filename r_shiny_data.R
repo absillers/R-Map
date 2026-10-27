@@ -35,54 +35,47 @@ dfs <- list(MSA_2016, MSA_2017, MSA_2018, MSA_2019, MSA_2020, MSA_2021, MSA_2022
 ###
 
 r_shiny_bls_data <- do.call(rbind, dfs)
+r_shiny_bls_data$MSA_NAME <- r_shiny_bls_data
 
 #add shapefile data
 census_url <- "https://www2.census.gov/programs-surveys/cbp/technical-documentation/reference/metro-area-geography-reference/msa_county_reference22.txt"
 
 clean_text <- stringi::stri_enc_toutf8(readLines(census_url, warn = FALSE), validate = TRUE)
-clean_text[276] <- gsub("Ca�on City", "Canon City", clean_text[276])
+clean_text[276] <- gsub("Ca�on City", "Canon City", clean_text[276]) #replace character 
+clean_text <- clean_text[2:length(clean_text)] #drop the col names
 
-GEOID <- list()
-msa_name <- list()
-fipstate <- list()
-fipscity <- list()
-county_name <- list()
-
+GEOID <- lapply(lapply(clean_text, function(x) unlist(strsplit(x, '\",\"'))[1]), 
+                function(x) gsub("\"", "", x))
+msa_name <- lapply(lapply(clean_text, function(x) unlist(strsplit(x, '\",\"'))[2]), 
+                   function(x) gsub("\"", "", x))
+fipstate <- lapply(lapply(clean_text, function(x) unlist(strsplit(x, '\",\"'))[3]), 
+                   function(x) gsub("\"", "", x))
+fipscity <- lapply(lapply(clean_text, function(x) unlist(strsplit(x, '\",\"'))[4]), 
+                   function(x) gsub("\"", "", x))
+county_name <- lapply(lapply(clean_text, function(x) unlist(strsplit(x, '\",\"'))[5]), 
+                      function(x) gsub("\"", "", x))
 
 ###
+GEOID <- data.frame(
+  GEOID  = unlist(GEOID),
+  area = unlist(msa_name),
+  state_FIP = unlist(fipstate),
+  city_FIP = unlist(fipscity),
+  county_name = unlist(county_name)
+)
 
-for (i in c(2:length(clean_text))){
- string <- unlist(strsplit(clean_text[i], ','))
-  GEOID <- c(GEOID, string[1])
-  msa_name <- c(GEOID, string[2])
-  fipstate <- c(GEOID, string[3])
-  fipscity <- c(GEOID, string[4])
-  county_name <-c(GEOID, string[5])}
+GEOID$AREA_TITLE <- gsub("(.*)(\\, \\w\\w)(.*)", "\\1\\2", GEOID$area)
+GEOID <- unique(GEOID[,c(1,6)])
 
+r_shiny_bls_data <- left_join(r_shiny_bls_data, GEOID, by = "AREA_TITLE")
 
-
-
-
-
-
-
-
-
-
-
-
+#find GEOID
 
 my_shapefile <- st_read("C:/Users/annas/OneDrive/Github/plotly_bls_map/cbsa_shape/cb_2025_us_cbsa_500k.shp")
 
-
-
-
-
 r_shiny_bls_data <- r_shiny_bls_data %>%
-  mutate(GEOID = as.character(GEOID)) %>%
   left_join(my_shapefile[c(4,10)], by = 'GEOID')%>%
   filter(!is.na(GEOID)) %>%
-  filter(!is.na(Percent)) %>%
   st_as_sf(sf_column_name  = "geometry") %>%
   st_transform(4326)
 
