@@ -35,7 +35,6 @@ dfs <- list(MSA_2016, MSA_2017, MSA_2018, MSA_2019, MSA_2020, MSA_2021, MSA_2022
 ###
 
 r_shiny_bls_data <- do.call(rbind, dfs)
-r_shiny_bls_data$MSA_NAME <- r_shiny_bls_data
 
 #add shapefile data
 census_url <- "https://www2.census.gov/programs-surveys/cbp/technical-documentation/reference/metro-area-geography-reference/msa_county_reference22.txt"
@@ -73,11 +72,17 @@ r_shiny_bls_data <- left_join(r_shiny_bls_data, GEOID, by = "AREA_TITLE")
 
 my_shapefile <- st_read("C:/Users/annas/OneDrive/Github/plotly_bls_map/cbsa_shape/cb_2025_us_cbsa_500k.shp")
 
+
 r_shiny_bls_data <- r_shiny_bls_data %>%
-  left_join(my_shapefile[c(4,10)], by = 'GEOID')%>%
-  filter(!is.na(GEOID)) %>%
+  left_join(my_shapefile[c(4,10)], by = 'GEOID') 
+
+r_shiny_bls_data <- r_shiny_bls_data %>%
+  filter(!is.na(GEOID))
+
+r_shiny_bls_data <- r_shiny_bls_data %>%
   st_as_sf(sf_column_name  = "geometry") %>%
   st_transform(4326)
+
 
 
 
