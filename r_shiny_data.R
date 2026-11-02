@@ -4,6 +4,8 @@ library(dplyr)
 library(sf)
 library(data.table)
 
+setwd('C:/Users/annas/OneDrive/R-Map')
+
 years <- seq(2016, 2024)
 file.list <- paste0("MSA_M", years, '_dl.xlsx')
 names <- paste0("MSA_", years)
@@ -29,7 +31,8 @@ for (i in c(1:9)){
     assign(names[i], as.data.frame(data_list[[i]]), envir = .GlobalEnv)
 }
 
-dfs <- list(MSA_2016, MSA_2017, MSA_2018, MSA_2019, MSA_2020, MSA_2021, MSA_2022, MSA_2023, MSA_2024)
+#dfs <- list(MSA_2016, MSA_2017, MSA_2018, MSA_2019, MSA_2020, MSA_2021, MSA_2022, MSA_2023, MSA_2024)
+dfs <- list(MSA_2022, MSA_2023)
 
 
 ###
@@ -66,13 +69,13 @@ GEOID <- data.frame(
 GEOID$AREA_TITLE <- gsub("(.*)(\\, \\w\\w)(.*)", "\\1\\2", GEOID$area)
 GEOID <- unique(GEOID[,c(1,6)])
 
-r_shiny_bls_data <- left_join(r_shiny_bls_data, GEOID, by = "AREA_TITLE")
+r_shiny_bls_data <- left_join(r_shiny_bls_data, GEOID, by = "AREA_TITLE") #find the GEOIDs
 
 #find GEOID
 
 my_shapefile <- st_read("C:/Users/annas/OneDrive/Github/plotly_bls_map/cbsa_shape/cb_2025_us_cbsa_500k.shp")
 
-
+#find the polygons
 r_shiny_bls_data <- r_shiny_bls_data %>%
   left_join(my_shapefile[c(4,10)], by = 'GEOID') 
 
@@ -85,20 +88,3 @@ r_shiny_bls_data <- r_shiny_bls_data %>%
 
 
 
-
-
-
-msa_employment_2025 <- read.csv("C:/Users/annas/OneDrive/Github/plotly_bls_map/plotly_msa_employment.csv")
-my_shapefile <- st_read("C:/Users/annas/OneDrive/Github/plotly_bls_map/cbsa_shape/cb_2025_us_cbsa_500k.shp")
-
-occupations <- unique(msa_employment_2025$Occupation)
-occupations_names <- gsub("Occupations \\(.*", "", occupations)
-
-
-msa_employment_2025 <- msa_employment_2025 %>%
-  mutate(GEOID = as.character(GEOID)) %>%
-  left_join(my_shapefile[c(4,10)], by = 'GEOID')%>%
-  filter(!is.na(GEOID)) %>%
-  filter(!is.na(Percent)) %>%
-  st_as_sf(sf_column_name  = "geometry") %>%
-  st_transform(4326)
