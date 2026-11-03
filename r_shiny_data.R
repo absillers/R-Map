@@ -86,8 +86,7 @@ r_shiny_bls_data <- r_shiny_bls_data %>%
   st_as_sf(sf_column_name  = "geometry") %>%
   st_transform(4326)
 
-
-#save(r_shiny_bls_data, file = "r_shiny_bls_data.Rda")
-
+r_shiny_bls_data$OCC_TYPE <- substr(r_shiny_bls_data$OCC_CODE, 1, 2)
+  
 r_shiny_bls_data_SM <- r_shiny_bls_data[r_shiny_bls_data$OCC_TITLE == 'Stonemasons',]
 

@@ -13,7 +13,8 @@ library(sf)
 #r_shiny_bls_data <- "C:/Users/annas/OneDrive/R-Map/r_shiny_bls_data.Rda"
 source("r_shiny_data.R", local = TRUE)
 
-occupations <- unique(r_shiny_bls_data$OCC_TITLE[r_shiny_bls_data$OCC_GROUP == 'major'])
+occupations_major <- unique(r_shiny_bls_data$OCC_TITLE[r_shiny_bls_data$OCC_GROUP == 'major'])
+
 r_shiny_bls_data <- r_shiny_bls_data[r_shiny_bls_data$OCC_GROUP == 'major',]
 
 # --- USER INTERFACE ---
@@ -24,9 +25,14 @@ ui <- fluidPage(
       selectInput(
         inputId = "metric",
         label = "Select Variable to Display:",
-        choices = setNames(unlist(occupations), unlist(occupations)),
-        #choices = c("Population Density" = "Community and Social Service Occupations (21-0000)" , "Poverty Rate (%)" = "Healthcare Support Occupations (31-0000)")
+        choices = setNames(unlist(occupations_major), unlist(occupations_major)),
+      ),
+      selectInput(
+        inputId = "subvalue",
+        label = "Select Variable to Display:",
+        choices = NULL,
       )
+      
     ),
     
     mainPanel(
@@ -64,7 +70,8 @@ server <- function(input, output, session) {
     ##
     # 1. Define color palette dynamically based on the range of the selected metric
     pal <- colorNumeric(
-      palette = "YlOrRd", 
+      palette = "viridis", 
+      reverse = TRUE,
       domain = selected_metric
     )
     
@@ -82,16 +89,17 @@ server <- function(input, output, session) {
       clearControls() %>% # Clear older legends
       addPolygons(
         fillColor = ~pal(selected_metric),
-        weight = 2,
+        weight = .5,
         opacity = 1,
-        color = "white",
-        dashArray = "3",
-        fillOpacity = 0.7,
+        color = "#667",
+        dashArray = "",
+        fillOpacity = 1,
         highlightOptions = highlightOptions(
-          weight = 5,
-          color = "#666",
+          weight = 1.3,
+          opacity = 1,
+          color = "#667",
           dashArray = "",
-          fillOpacity = 0.7,
+          fillOpacity = 1,
           bringToFront = TRUE
         ),
         label = labels,
