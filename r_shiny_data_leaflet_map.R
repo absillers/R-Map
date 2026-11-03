@@ -10,12 +10,15 @@ library(sf)
 #msa_employment_2025 <- read.csv("C:/Users/annas/OneDrive/Github/plotly_bls_map/plotly_msa_employment.csv")
 #my_shapefile <- st_read("C:/Users/annas/OneDrive/Github/plotly_bls_map/cbsa_shape/cb_2025_us_cbsa_500k.shp")
 
-occupations <- unique(r_shiny_bls_data$OCC_TITLE[r_shiny_bls_data$OCC_GROUP == 'major'],)
+#r_shiny_bls_data <- "C:/Users/annas/OneDrive/R-Map/r_shiny_bls_data.Rda"
+source("r_shiny_data.R", local = TRUE)
+
+occupations <- unique(r_shiny_bls_data$OCC_TITLE[r_shiny_bls_data$OCC_GROUP == 'major'])
+r_shiny_bls_data <- r_shiny_bls_data[r_shiny_bls_data$OCC_GROUP == 'major',]
 
 # --- USER INTERFACE ---
 ui <- fluidPage(
   titlePanel("Dynamic R Shiny Leaflet Choropleth"),
-  
   sidebarLayout(
     sidebarPanel(
       selectInput(
@@ -44,7 +47,7 @@ server <- function(input, output, session) {
   # Initialize the base map layer
   output$map <- renderLeaflet({
     
-    leaflet(msa_employment_2025) %>%
+    leaflet(r_shiny_bls_data) %>%
       addTiles(
         urlTemplate = url,
         attribution = paste(
@@ -57,8 +60,8 @@ server <- function(input, output, session) {
   # DYNAMIC reactive updates via leafletProxy
   observe({
     # Select the metric column based on user input
-    selected_metric <- msa_employment_2025$Percent[msa_employment_2025$Occupation == input$metric]
-    
+    selected_metric <- as.numeric(r_shiny_bls_data$TOT_EMP[r_shiny_bls_data$OCC_TITLE == input$metric])
+    ##
     # 1. Define color palette dynamically based on the range of the selected metric
     pal <- colorNumeric(
       palette = "YlOrRd", 
@@ -68,13 +71,13 @@ server <- function(input, output, session) {
     # 2. Build interactive dynamic labels
     labels <- sprintf(
       "<strong>%s</strong><br/>%s: %s",
-      msa_employment_2025$Area[msa_employment_2025$Occupation == input$metric], 
+      r_shiny_bls_data$AREA_TITLE[r_shiny_bls_data$OCC_TITLE == input$metric], 
       input$metric, 
       round(selected_metric, 2)
     ) %>% lapply(htmltools::HTML)
     
     # 3. Update the existing map instance using proxy
-    leafletProxy("map", data = msa_employment_2025[msa_employment_2025$Occupation == input$metric,]) %>%
+    leafletProxy("map", data = r_shiny_bls_data[r_shiny_bls_data$OCC_TITLE == input$metric,]) %>%
       clearShapes() %>%  # Clear older polygons before drawing new colors
       clearControls() %>% # Clear older legends
       addPolygons(
