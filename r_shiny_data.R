@@ -77,17 +77,11 @@ my_shapefile <- st_read("C:/Users/annas/OneDrive/Github/plotly_bls_map/cbsa_shap
 
 #find the polygons
 r_shiny_bls_data <- r_shiny_bls_data %>%
-  left_join(my_shapefile[c(4,10)], by = 'GEOID') 
-
-r_shiny_bls_data <- r_shiny_bls_data %>%
-  filter(!is.na(GEOID))
-
-r_shiny_bls_data <- r_shiny_bls_data %>%
+  left_join(my_shapefile[c(4,10)], by = 'GEOID') %>%
+  filter(!is.na(GEOID)) %>%
   st_as_sf(sf_column_name  = "geometry") %>%
   st_transform(4326)
 
 r_shiny_bls_data$OCC_TYPE <- substr(r_shiny_bls_data$OCC_CODE, 1, 2)
-  
-r_shiny_bls_data_SM <- r_shiny_bls_data[r_shiny_bls_data$OCC_TITLE == 'Stonemasons',]
 
 
