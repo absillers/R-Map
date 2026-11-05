@@ -17,12 +17,12 @@ ui <- fluidPage(
     sidebarPanel(
       selectInput(
         inputId = "metric",
-        label = "Select Variable to Display:",
+        label = "Select Occupation Group:",
         choices = c(setNames(unlist(occupations_major), unlist(occupations_major))),
       ),
       selectInput(
         inputId = "subvalue",
-        label = "Select Variable to Display:",
+        label = "Select Occupation:",
         choices = NULL,
       )
       
@@ -55,7 +55,7 @@ server <- function(input, output, session) {
       setView(lng = -96, lat = 37.8, zoom = 4) # Centers over the US
   })
   
-  # DYNAMIC reactive updates via leafletProxy
+  #dropdown menu values - react
   observeEvent(input$metric, {
       if (input$metric == "None") {
         choices <- c("")
@@ -63,66 +63,72 @@ server <- function(input, output, session) {
         a <- r_shiny_bls_data %>% filter(OCC_TITLE == input$metric) %>% pull(OCC_TYPE) %>% unique()
         choices <- r_shiny_bls_data %>% filter(OCC_TYPE == a & OCC_GROUP == 'detailed') %>% pull(OCC_TITLE) %>% unique()
       }
-      updateSelectInput(session, "subvalue", choices = choices) 
-      
-    #selected_metric <- as.numeric(r_shiny_bls_data$TOT_EMP[r_shiny_bls_data$OCC_TITLE == input$metric])
-  })
+      updateSelectInput(session, "subvalue", choices = (c(None = 'Select occupation', choices)))
+        })
   
     # Select the metric column based on user input
-    #selected_metric <- as.numeric(r_shiny_bls_data$TOT_EMP[r_shiny_bls_data$OCC_TITLE == input$metric])
-    
-    # ##
-    # # 1. Define color palette dynamically based on the range of the selected metric
-    # pal <- colorNumeric(
-    #   palette = "viridis", 
-    #   reverse = TRUE,
-    #   domain = selected_metric
-    # )
-    # 
-    # # 2. Build interactive dynamic labels
-    # labels <- sprintf(
-    #   "<strong>%s</strong><br/>%s: %s",
-    #   r_shiny_bls_data$AREA_TITLE[r_shiny_bls_data$OCC_TITLE == input$metric], 
-    #   input$metric, 
-    #   round(selected_metric, 2)
-    # ) %>% lapply(htmltools::HTML)
-    # 
-    # # 3. Update the existing map instance using proxy
-    # leafletProxy("map", data = r_shiny_bls_data[r_shiny_bls_data$OCC_TITLE == input$metric,]) %>%
-    #   clearShapes() %>%  # Clear older polygons before drawing new colors
-    #   clearControls() %>% # Clear older legends
-    #   addPolygons(
-    #     fillColor = ~pal(selected_metric),
-    #     weight = .5,
-    #     opacity = 1,
-    #     color = "#667",
-    #     dashArray = "",
-    #     fillOpacity = 1,
-    #     highlightOptions = highlightOptions(
-    #       weight = 1.3,
-    #       opacity = 1,
-    #       color = "#667",
-    #       dashArray = "",
-    #       fillOpacity = 1,
-    #       bringToFront = TRUE
-    #     ),
-    #     label = labels,
-    #     labelOptions = labelOptions(
-    #       style = list("font-weight" = "normal", padding = "3px 8px"),
-    #       textsize = "15px",
-    #       direction = "auto"
-    #     )
-    #   ) %>%
-    #   # Add dynamic legend matching the current distribution
-    #   addLegend(
-    #     pal = pal, 
-    #     values = ~selected_metric, 
-    #     opacity = 0.7, 
-    #     title = input$metric,
-    #     position = "bottomright"
-    #   )
-
   
+  observe({
+    
+    selected_metric <- as.numeric(r_shiny_bls_data$TOT_EMP[r_shiny_bls_data$OCC_TITLE == input$metric])
+    
+    
+    
+    
+    # 1. Define color palette dynamically based on the range of the selected metric
+    pal <- colorNumeric(
+      palette = "viridis",
+      reverse = TRUE,
+      domain = selected_metric
+    )
+
+    # # 2. Build interactive dynamic labels
+    labels <- sprintf(
+      "<strong>%s</strong><br/>%s: %s",
+      r_shiny_bls_data$AREA_TITLE[r_shiny_bls_data$OCC_TITLE == input$metric],
+      input$metric,
+      round(selected_metric, 2)
+    ) %>% lapply(htmltools::HTML)
+
+    # # 3. Update the existing map instance using proxy
+    
+    
+    
+    
+    
+    leafletProxy("map", data = r_shiny_bls_data[r_shiny_bls_data$OCC_TITLE == input$metric,]) %>%
+      clearShapes() %>%  # Clear older polygons before drawing new colors
+      clearControls() %>% # Clear older legends
+      addPolygons(
+        fillColor = ~pal(selected_metric),
+        weight = .5,
+        opacity = 1,
+        color = "#667",
+        dashArray = "",
+        fillOpacity = 1,
+        highlightOptions = highlightOptions(
+          weight = 1.3,
+          opacity = 1,
+          color = "#667",
+          dashArray = "",
+          fillOpacity = 1,
+          bringToFront = TRUE
+        ),
+        label = labels,
+        labelOptions = labelOptions(
+          style = list("font-weight" = "normal", padding = "3px 8px"),
+          textsize = "15px",
+          direction = "auto"
+        )
+      ) %>%
+      # Add dynamic legend matching the current distribution
+      addLegend(
+        pal = pal,
+        values = ~selected_metric,
+        opacity = 0.7,
+        title = input$metric,
+        position = "bottomright"
+      )})
 }
 
 # Run the Application 
