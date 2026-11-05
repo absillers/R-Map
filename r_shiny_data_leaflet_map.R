@@ -5,12 +5,7 @@ library(sf)
 
 #add API
 ####BASED OFF LEAFLET_MAP_PERCENT
-###RUN THE r_shiny_data 
 
-#msa_employment_2025 <- read.csv("C:/Users/annas/OneDrive/Github/plotly_bls_map/plotly_msa_employment.csv")
-#my_shapefile <- st_read("C:/Users/annas/OneDrive/Github/plotly_bls_map/cbsa_shape/cb_2025_us_cbsa_500k.shp")
-
-#r_shiny_bls_data <- "C:/Users/annas/OneDrive/R-Map/r_shiny_bls_data.Rda"
 source("r_shiny_data.R", local = TRUE)
 
 occupations_major <- unique(r_shiny_bls_data$OCC_TITLE[r_shiny_bls_data$OCC_GROUP == 'major'])
@@ -44,8 +39,6 @@ ui <- fluidPage(
 # --- SERVER LOGIC ---
 server <- function(input, output, session) {
   
-  #a <- r_shiny_bls_data %>% filter(OCC_TITLE == input$metric) %>% pull(OCC_TYPE) %>% unique()
-  
   url <- paste0(switch(
     'CartoDB', 
     'CartoDB'="https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png",
@@ -54,7 +47,6 @@ server <- function(input, output, session) {
   
   # Initialize the base map layer
   output$map <- renderLeaflet({
-    
     leaflet(r_shiny_bls_data) %>%
       addTiles(
         urlTemplate = url,
@@ -66,18 +58,17 @@ server <- function(input, output, session) {
   })
   
   # DYNAMIC reactive updates via leafletProxy
-  observe({
-    observeEvent(input$metric, {
+  reactive(observeEvent(input$metric, {
       if (input$metric == "None") {
         choices <- c("")
       } else {
-        a <- r_shiny_bls_data %>% filter(OCC_TITLE == input$metric) %>% pull(OCC_TYPE) %>% unique()
-        choices <- r_shiny_bls_data %>% filter(OCC_TYPE == a & OCC_GROUP == 'detailed') %>% pull(OCC_TITLE) %>% unique()
+        #a <- r_shiny_bls_data %>% filter(OCC_TITLE == input$metric) %>% pull(OCC_TYPE) %>% unique()
+        choices <- r_shiny_bls_data %>% filter(OCC_TYPE == '11' & OCC_GROUP == 'detailed') %>% pull(OCC_TITLE) %>% unique()
       }
       updateSelectInput(session, "subvalue", choices = choices)
-    })
+    }))
     
-    
+  
     # Select the metric column based on user input
     selected_metric <- as.numeric(r_shiny_bls_data$TOT_EMP[r_shiny_bls_data$OCC_TITLE == input$metric])
     
@@ -131,7 +122,6 @@ server <- function(input, output, session) {
         title = input$metric,
         position = "bottomright"
       )
-  })
 }
 
 # Run the Application 

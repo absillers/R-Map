@@ -1,0 +1,201 @@
+"","country","gender","age","value"
+"1","All Occupations","total","Abilene, TX",70730
+"2","Management Occupations","major","Abilene, TX",4470
+"3","General and Operations Managers","detailed","Abilene, TX",2290
+"4","Marketing Managers","detailed","Abilene, TX",50
+"5","Sales Managers","detailed","Abilene, TX",260
+"6","Administrative Services Managers","detailed","Abilene, TX",90
+"7","Facilities Managers","detailed","Abilene, TX",50
+"8","Computer and Information Systems Managers","detailed","Abilene, TX",100
+"9","Financial Managers","detailed","Abilene, TX",210
+"10","Industrial Production Managers","detailed","Abilene, TX",50
+"11","Transportation, Storage, and Distribution Managers","detailed","Abilene, TX",60
+"12","Human Resources Managers","detailed","Abilene, TX",30
+"13","Construction Managers","detailed","Abilene, TX",90
+"14","Education Administrators, Kindergarten through Secondary","detailed","Abilene, TX",180
+"15","Education Administrators, Postsecondary","detailed","Abilene, TX",130
+"16","Food Service Managers","detailed","Abilene, TX",90
+"17","Medical and Health Services Managers","detailed","Abilene, TX",260
+"18","Property, Real Estate, and Community Association Managers","detailed","Abilene, TX",130
+"19","Social and Community Service Managers","detailed","Abilene, TX",80
+"20","Managers, All Other","detailed","Abilene, TX",80
+"21","Business and Financial Operations Occupations","major","Abilene, TX",2930
+"22","Buyers and Purchasing Agents","detailed","Abilene, TX",110
+"23","Compliance Officers","detailed","Abilene, TX",150
+"24","Cost Estimators","detailed","Abilene, TX",100
+"25","Human Resources Specialists","detailed","Abilene, TX",260
+"26","Logisticians","detailed","Abilene, TX",30
+"27","Project Management Specialists","detailed","Abilene, TX",260
+"28","Management Analysts","detailed","Abilene, TX",100
+"29","Meeting, Convention, and Event Planners","detailed","Abilene, TX",70
+"30","Fundraisers","detailed","Abilene, TX",40
+"31","Compensation, Benefits, and Job Analysis Specialists","detailed","Abilene, TX",30
+"32","Training and Development Specialists","detailed","Abilene, TX",240
+"33","Market Research Analysts and Marketing Specialists","detailed","Abilene, TX",160
+"34","Business Operations Specialists, All Other","detailed","Abilene, TX",300
+"35","Accountants and Auditors","detailed","Abilene, TX",460
+"36","Property Appraisers and Assessors","detailed","Abilene, TX",60
+"37","Financial and Investment Analysts","detailed","Abilene, TX",60
+"38","Personal Financial Advisors","detailed","Abilene, TX",80
+"39","Loan Officers","detailed","Abilene, TX",130
+"40","Tax Preparers","detailed","Abilene, TX",30
+"41","Financial Specialists, All Other","detailed","Abilene, TX",60
+"42","Computer and Mathematical Occupations","major","Abilene, TX",880
+"43","Computer Systems Analysts","detailed","Abilene, TX",60
+"44","Computer User Support Specialists","detailed","Abilene, TX",270
+"45","Network and Computer Systems Administrators","detailed","Abilene, TX",100
+"46","Computer Programmers","detailed","Abilene, TX",40
+"47","Software Developers","detailed","Abilene, TX",120
+"48","Computer Occupations, All Other","detailed","Abilene, TX",80
+"49","Architecture and Engineering Occupations","major","Abilene, TX",610
+"50","Civil Engineers","detailed","Abilene, TX",120
+"51","Electrical Engineers","detailed","Abilene, TX",50
+"52","Industrial Engineers","detailed","Abilene, TX",30
+"53","Mechanical Engineers","detailed","Abilene, TX",50
+"54","Architectural and Civil Drafters","detailed","Abilene, TX",50
+"55","Civil Engineering Technologists and Technicians","detailed","Abilene, TX",40
+"56","Surveying and Mapping Technicians","detailed","Abilene, TX",50
+"57","Life, Physical, and Social Science Occupations","major","Abilene, TX",360
+"58","Clinical and Counseling Psychologists","detailed","Abilene, TX",40
+"59","School Psychologists","detailed","Abilene, TX",50
+"60","Occupational Health and Safety Specialists","detailed","Abilene, TX",60
+"61","Community and Social Service Occupations","major","Abilene, TX",1260
+"62","Educational, Guidance, and Career Counselors and Advisors","detailed","Abilene, TX",280
+"63","Substance Abuse, Behavioral Disorder, and Mental Health Counselors","detailed","Abilene, TX",130
+"64","Child, Family, and School Social Workers","detailed","Abilene, TX",220
+"65","Healthcare Social Workers","detailed","Abilene, TX",80
+"66","Mental Health and Substance Abuse Social Workers","detailed","Abilene, TX",70
+"67","Health Education Specialists","detailed","Abilene, TX",40
+"68","Probation Officers and Correctional Treatment Specialists","detailed","Abilene, TX",80
+"69","Social and Human Service Assistants","detailed","Abilene, TX",200
+"70","Community Health Workers","detailed","Abilene, TX",40
+"71","Clergy","detailed","Abilene, TX",30
+"72","Legal Occupations","major","Abilene, TX",260
+"73","Lawyers","detailed","Abilene, TX",110
+"74","Paralegals and Legal Assistants","detailed","Abilene, TX",80
+"75","Title Examiners, Abstractors, and Searchers","detailed","Abilene, TX",30
+"76","Educational Instruction and Library Occupations","major","Abilene, TX",5070
+"77","Health Specialties Teachers, Postsecondary","detailed","Abilene, TX",180
+"78","Career/Technical Education Teachers, Postsecondary","detailed","Abilene, TX",70
+"79","Postsecondary Teachers, All Other","detailed","Abilene, TX",90
+"80","Preschool Teachers, Except Special Education","detailed","Abilene, TX",170
+"81","Kindergarten Teachers, Except Special Education","detailed","Abilene, TX",60
+"82","Elementary School Teachers, Except Special Education","detailed","Abilene, TX",900
+"83","Middle School Teachers, Except Special and Career/Technical Education","detailed","Abilene, TX",480
+"84","Secondary School Teachers, Except Special and Career/Technical Education","detailed","Abilene, TX",630
+"85","Career/Technical Education Teachers, Secondary School","detailed","Abilene, TX",60
+"86","Special Education Teachers, Kindergarten and Elementary School","detailed","Abilene, TX",50
+"87","Special Education Teachers, Secondary School","detailed","Abilene, TX",50
+"88","Special Education Teachers, All Other","detailed","Abilene, TX",90
+"89","Self-Enrichment Teachers","detailed","Abilene, TX",70
+"90","Substitute Teachers, Short-Term","detailed","Abilene, TX",240
+"91","Teachers and Instructors, All Other","detailed","Abilene, TX",40
+"92","Librarians and Media Collections Specialists","detailed","Abilene, TX",50
+"93","Library Technicians","detailed","Abilene, TX",40
+"94","Instructional Coordinators","detailed","Abilene, TX",170
+"95","Teaching Assistants, Postsecondary","detailed","Abilene, TX",70
+"96","Teaching Assistants, Except Postsecondary","detailed","Abilene, TX",700
+"97","Educational Instruction and Library Workers, All Other","detailed","Abilene, TX",140
+"98","Arts, Design, Entertainment, Sports, and Media Occupations","major","Abilene, TX",720
+"99","Graphic Designers","detailed","Abilene, TX",60
+"100","Merchandise Displayers and Window Trimmers","detailed","Abilene, TX",140
+"101","Producers and Directors","detailed","Abilene, TX",50
+"102","Coaches and Scouts","detailed","Abilene, TX",140
+"103","Public Relations Specialists","detailed","Abilene, TX",110
+"104","Healthcare Practitioners and Technical Occupations","major","Abilene, TX",5390
+"105","Dentists, General","detailed","Abilene, TX",40
+"106","Pharmacists","detailed","Abilene, TX",250
+"107","Physician Assistants","detailed","Abilene, TX",40
+"108","Occupational Therapists","detailed","Abilene, TX",60
+"109","Physical Therapists","detailed","Abilene, TX",120
+"110","Respiratory Therapists","detailed","Abilene, TX",90
+"111","Speech-Language Pathologists","detailed","Abilene, TX",110
+"112","Registered Nurses","detailed","Abilene, TX",1790
+"113","Nurse Practitioners","detailed","Abilene, TX",170
+"114","Dental Hygienists","detailed","Abilene, TX",80
+"115","Clinical Laboratory Technologists and Technicians","detailed","Abilene, TX",150
+"116","Diagnostic Medical Sonographers","detailed","Abilene, TX",60
+"117","Radiologic Technologists and Technicians","detailed","Abilene, TX",190
+"118","Paramedics","detailed","Abilene, TX",60
+"119","Pharmacy Technicians","detailed","Abilene, TX",260
+"120","Veterinary Technologists and Technicians","detailed","Abilene, TX",80
+"121","Ophthalmic Medical Technicians","detailed","Abilene, TX",50
+"122","Licensed Practical and Licensed Vocational Nurses","detailed","Abilene, TX",650
+"123","Medical Records Specialists","detailed","Abilene, TX",140
+"124","Health Technologists and Technicians, All Other","detailed","Abilene, TX",70
+"125","Health Information Technologists and Medical Registrars","detailed","Abilene, TX",60
+"126","Healthcare Support Occupations","major","Abilene, TX",3640
+"127","Home Health and Personal Care Aides","detailed","Abilene, TX",1690
+"128","Nursing Assistants","detailed","Abilene, TX",810
+"129","Physical Therapist Assistants","detailed","Abilene, TX",40
+"130","Physical Therapist Aides","detailed","Abilene, TX",90
+"131","Dental Assistants","detailed","Abilene, TX",190
+"132","Medical Assistants","detailed","Abilene, TX",450
+"133","Veterinary Assistants and Laboratory Animal Caretakers","detailed","Abilene, TX",50
+"134","Phlebotomists","detailed","Abilene, TX",80
+"135","Healthcare Support Workers, All Other","detailed","Abilene, TX",90
+"136","Protective Service Occupations","major","Abilene, TX",1840
+"137","First-Line Supervisors of Correctional Officers","detailed","Abilene, TX",100
+"138","First-Line Supervisors of Police and Detectives","detailed","Abilene, TX",30
+"139","First-Line Supervisors of Firefighting and Prevention Workers","detailed","Abilene, TX",60
+"140","Firefighters","detailed","Abilene, TX",180
+"141","Correctional Officers and Jailers","detailed","Abilene, TX",720
+"142","Detectives and Criminal Investigators","detailed","Abilene, TX",50
+"143","Police and Sheriff's Patrol Officers","detailed","Abilene, TX",380
+"144","Security Guards","detailed","Abilene, TX",160
+"145","Crossing Guards and Flaggers","detailed","Abilene, TX",40
+"146","Food Preparation and Serving Related Occupations","major","Abilene, TX",7030
+"147","Chefs and Head Cooks","detailed","Abilene, TX",80
+"148","First-Line Supervisors of Food Preparation and Serving Workers","detailed","Abilene, TX",700
+"149","Cooks, Institution and Cafeteria","detailed","Abilene, TX",300
+"150","Cooks, Restaurant","detailed","Abilene, TX",600
+"151","Cooks, Short Order","detailed","Abilene, TX",90
+"152","Food Preparation Workers","detailed","Abilene, TX",770
+"153","Bartenders","detailed","Abilene, TX",280
+"154","Fast Food and Counter Workers","detailed","Abilene, TX",2130
+"155","Waiters and Waitresses","detailed","Abilene, TX",1150
+"156","Food Servers, Nonrestaurant","detailed","Abilene, TX",70
+"157","Dining Room and Cafeteria Attendants and Bartender Helpers","detailed","Abilene, TX",230
+"158","Dishwashers","detailed","Abilene, TX",180
+"159","Hosts and Hostesses, Restaurant, Lounge, and Coffee Shop","detailed","Abilene, TX",240
+"160","Building and Grounds Cleaning and Maintenance Occupations","major","Abilene, TX",2220
+"161","First-Line Supervisors of Housekeeping and Janitorial Workers","detailed","Abilene, TX",100
+"162","First-Line Supervisors of Landscaping, Lawn Service, and Groundskeeping Workers","detailed","Abilene, TX",50
+"163","Janitors and Cleaners, Except Maids and Housekeeping Cleaners","detailed","Abilene, TX",1160
+"164","Maids and Housekeeping Cleaners","detailed","Abilene, TX",430
+"165","Pest Control Workers","detailed","Abilene, TX",40
+"166","Landscaping and Groundskeeping Workers","detailed","Abilene, TX",400
+"167","Personal Care and Service Occupations","major","Abilene, TX",1170
+"168","First-Line Supervisors of Entertainment and Recreation Workers, Except Gambling Services","detailed","Abilene, TX",50
+"169","First-Line Supervisors of Personal Service Workers","detailed","Abilene, TX",60
+"170","Animal Caretakers","detailed","Abilene, TX",110
+"171","Amusement and Recreation Attendants","detailed","Abilene, TX",120
+"172","Hairdressers, Hairstylists, and Cosmetologists","detailed","Abilene, TX",120
+"173","Skincare Specialists","detailed","Abilene, TX",40
+"174","Childcare Workers","detailed","Abilene, TX",240
+"175","Recreation Workers","detailed","Abilene, TX",100
+"176","Residential Advisors","detailed","Abilene, TX",50
+"177","Sales and Related Occupations","major","Abilene, TX",7250
+"178","First-Line Supervisors of Retail Sales Workers","detailed","Abilene, TX",800
+"179","First-Line Supervisors of Non-Retail Sales Workers","detailed","Abilene, TX",90
+"180","Cashiers","detailed","Abilene, TX",2040
+"181","Counter and Rental Clerks","detailed","Abilene, TX",220
+"182","Parts Salespersons","detailed","Abilene, TX",200
+"183","Retail Salespersons","detailed","Abilene, TX",1970
+"184","Insurance Sales Agents","detailed","Abilene, TX",200
+"185","Securities, Commodities, and Financial Services Sales Agents","detailed","Abilene, TX",90
+"186","Sales Representatives of Services, Except Advertising, Insurance, Financial Services, and Travel","detailed","Abilene, TX",430
+"187","Sales Representatives, Wholesale and Manufacturing, Technical and Scientific Products","detailed","Abilene, TX",60
+"188","Sales Representatives, Wholesale and Manufacturing, Except Technical and Scientific Products","detailed","Abilene, TX",380
+"189","Real Estate Sales Agents","detailed","Abilene, TX",70
+"190","Sales and Related Workers, All Other","detailed","Abilene, TX",110
+"191","Office and Administrative Support Occupations","major","Abilene, TX",10750
+"192","First-Line Supervisors of Office and Administrative Support Workers","detailed","Abilene, TX",960
+"193","Bill and Account Collectors","detailed","Abilene, TX",100
+"194","Billing and Posting Clerks","detailed","Abilene, TX",140
+"195","Bookkeeping, Accounting, and Auditing Clerks","detailed","Abilene, TX",780
+"196","Payroll and Timekeeping Clerks","detailed","Abilene, TX",80
+"197","Tellers","detailed","Abilene, TX",220
+"198","Court, Municipal, and License Clerks","detailed","Abilene, TX",80
+"199","Customer Service Representatives","detailed","Abilene, TX",2460
+"200","Eligibility Interviewers, Government Programs","detailed","Abilene, TX",50
