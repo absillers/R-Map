@@ -58,19 +58,20 @@ server <- function(input, output, session) {
   })
   
   # DYNAMIC reactive updates via leafletProxy
-  reactive(observeEvent(input$metric, {
+  observe(observeEvent(input$metric, {
       if (input$metric == "None") {
         choices <- c("")
       } else {
         #a <- r_shiny_bls_data %>% filter(OCC_TITLE == input$metric) %>% pull(OCC_TYPE) %>% unique()
         choices <- r_shiny_bls_data %>% filter(OCC_TYPE == '11' & OCC_GROUP == 'detailed') %>% pull(OCC_TITLE) %>% unique()
       }
-      updateSelectInput(session, "subvalue", choices = choices)
-    }))
-    
+      updateSelectInput(session, "subvalue", choices = choices) #where the new values come up
+  
+    selected_metric <- as.numeric(r_shiny_bls_data$TOT_EMP[r_shiny_bls_data$OCC_TITLE == input$metric])
+
   
     # Select the metric column based on user input
-    selected_metric <- as.numeric(r_shiny_bls_data$TOT_EMP[r_shiny_bls_data$OCC_TITLE == input$metric])
+    #selected_metric <- as.numeric(r_shiny_bls_data$TOT_EMP[r_shiny_bls_data$OCC_TITLE == input$metric])
     
     ##
     # 1. Define color palette dynamically based on the range of the selected metric
@@ -122,6 +123,8 @@ server <- function(input, output, session) {
         title = input$metric,
         position = "bottomright"
       )
+  }))
+  
 }
 
 # Run the Application 
