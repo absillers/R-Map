@@ -18,7 +18,7 @@ ui <- fluidPage(
       selectInput(
         inputId = "metric",
         label = "Select Variable to Display:",
-        choices = c(None = 'None', setNames(unlist(occupations_major), unlist(occupations_major))),
+        choices = c(setNames(unlist(occupations_major), unlist(occupations_major))),
       ),
       selectInput(
         inputId = "subvalue",
@@ -56,17 +56,17 @@ server <- function(input, output, session) {
   })
   
   # DYNAMIC reactive updates via leafletProxy
-  observe(observeEvent(input$metric, {
+  observeEvent(input$metric, {
       if (input$metric == "None") {
-        choices <- c("XXX")
+        choices <- c("")
       } else {
-        #a <- r_shiny_bls_data %>% filter(OCC_TITLE == input$metric) %>% pull(OCC_TYPE) %>% unique()
-        choices <- r_shiny_bls_data %>% filter(OCC_TYPE == '11' & OCC_GROUP == 'detailed') %>% pull(OCC_TITLE) %>% unique()
+        a <- r_shiny_bls_data %>% filter(OCC_TITLE == input$metric) %>% pull(OCC_TYPE) %>% unique()
+        choices <- r_shiny_bls_data %>% filter(OCC_TYPE == a & OCC_GROUP == 'detailed') %>% pull(OCC_TITLE) %>% unique()
       }
       updateSelectInput(session, "subvalue", choices = choices) 
       
     #selected_metric <- as.numeric(r_shiny_bls_data$TOT_EMP[r_shiny_bls_data$OCC_TITLE == input$metric])
-  }))
+  })
   
     # Select the metric column based on user input
     #selected_metric <- as.numeric(r_shiny_bls_data$TOT_EMP[r_shiny_bls_data$OCC_TITLE == input$metric])
