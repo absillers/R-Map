@@ -9,6 +9,8 @@ library(sf)
 source("r_shiny_data.R", local = TRUE)
 occupations_major <- unique(r_shiny_bls_data$OCC_TITLE[r_shiny_bls_data$OCC_GROUP == 'major'])
 
+r_shiny_bls_data <- r_shiny_bls_data %>%
+  filter(YEAR == 2023)
 
 # --- USER INTERFACE ---
 ui <- fluidPage(
@@ -60,8 +62,8 @@ server <- function(input, output, session) {
       if (input$metric == "None") {
         choices <- c("")
       } else {
-        a <- r_shiny_bls_data %>% filter(OCC_TITLE == input$metric) %>% pull(OCC_TYPE) %>% unique()
-        choices <- r_shiny_bls_data %>% filter(OCC_TYPE == a & OCC_GROUP == 'detailed') %>% pull(OCC_TITLE) %>% unique()
+        occupation_type_input <- r_shiny_bls_data %>% filter(OCC_TITLE == input$metric) %>% pull(OCC_TYPE) %>% unique()
+        choices <- r_shiny_bls_data %>% filter(OCC_TYPE == occupation_type_input & OCC_GROUP == 'detailed') %>% pull(OCC_TITLE) %>% unique()
       }
       updateSelectInput(session, "subvalue", choices = (c(None = 'Select occupation', choices)))
         })
@@ -71,9 +73,6 @@ server <- function(input, output, session) {
   observe({
     
     selected_metric <- as.numeric(r_shiny_bls_data$TOT_EMP[r_shiny_bls_data$OCC_TITLE == input$metric])
-    
-    
-    
     
     # 1. Define color palette dynamically based on the range of the selected metric
     pal <- colorNumeric(
@@ -90,13 +89,9 @@ server <- function(input, output, session) {
       round(selected_metric, 2)
     ) %>% lapply(htmltools::HTML)
 
-    # # 3. Update the existing map instance using proxy
-    
-    
-    
-    
-    
-    leafletProxy("map", data = r_shiny_bls_data[r_shiny_bls_data$OCC_TITLE == input$metric,]) %>%
+    # 3. Update the existing map instance using proxy
+    leafletProxy("map", 
+      data = r_shiny_bls_data[r_shiny_bls_data$OCC_TITLE == input$metric,]) %>%
       clearShapes() %>%  # Clear older polygons before drawing new colors
       clearControls() %>% # Clear older legends
       addPolygons(
