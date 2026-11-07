@@ -83,5 +83,3 @@ r_shiny_bls_data <- r_shiny_bls_data %>%
   st_transform(4326)
 
 r_shiny_bls_data$OCC_TYPE <- substr(r_shiny_bls_data$OCC_CODE, 1, 2)
-
-

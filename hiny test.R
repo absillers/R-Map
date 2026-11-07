@@ -28,20 +28,20 @@ server <- function(input, output, session) {
     }
     updateSelectInput(session, "subgroup_value", choices = choices)
   })
-  
-  # filtered_data <- reactive({
-  #   message("calculating data")
-  #   data <- fulldf %>% filter(country == input$country)
-  #   if (input$subgroup_var != "None") {
-  #     data <- data %>% filter(!!sym(input$subgroup_var) == input$subgroup_value)
-  #   }
-  #   data
-  # }) %>% bindEvent(input$subgroup_value)
-  # 
-  # output$results <- renderTable({
-  #   message("rendering table")
-  #   filtered_data()
-  # })
+
+  filtered_data <- reactive({
+    message("calculating data")
+    data <- fulldf %>% filter(country == input$country)
+    if (input$subgroup_var != "None") {
+      data <- data %>% filter(!!sym(input$subgroup_var) == input$subgroup_value)
+    }
+    data
+  }) %>% bindEvent(input$subgroup_value)
+
+  output$results <- renderTable({
+    message("rendering table")
+    filtered_data()
+  })
   
 }
 
