@@ -76,15 +76,12 @@ server <- function(input, output, session) {
   
   
   observe({
+    if (input$subvalue == 'None'){
+    selected_metric <- as.numeric(r_shiny_bls_data$TOT_EMP[r_shiny_bls_data$OCC_TITLE == input$metric])}
+    else {
     selected_metric <- as.numeric(r_shiny_bls_data$TOT_EMP[r_shiny_bls_data$OCC_TITLE == input$subvalue])
-    #selected_metric <- as.numeric(r_shiny_bls_data$TOT_EMP[r_shiny_bls_data$OCC_TITLE == input$subvalue])
-    
-    
-    # selected_metric <- if ((input$subvalue == "None")){
-    #   as.numeric(r_shiny_bls_data$TOT_EMP[r_shiny_bls_data$OCC_TITLE == input$metric])
-    #   } else {
-    #   as.numeric(r_shiny_bls_data$TOT_EMP[r_shiny_bls_data$OCC_TITLE == input$metric])} #this is the problem - input$subvalue
-    
+    }
+
     # 1. Define color palette dynamically based on the range of the selected metric
     pal <- colorNumeric(
       palette = "viridis",
@@ -104,14 +101,15 @@ server <- function(input, output, session) {
     ##create df
     
 
-    # data <- if (input$subvalue == "Select occupation"){
+    # data <- if (input$subvalue %in% c('None', '')){
     #   as.numeric(r_shiny_bls_data$TOT_EMP[r_shiny_bls_data$OCC_TITLE == input$metric])
     # } else {
     #   as.numeric(r_shiny_bls_data$TOT_EMP[r_shiny_bls_data$OCC_TITLE == input$subvalue])}
 
     # 3. Update the existing map instance using proxy
+    #what is the point of the data?
     leafletProxy("map", 
-      data = r_shiny_bls_data[r_shiny_bls_data$OCC_TITLE == input$metric,]) %>%
+        data =  r_shiny_bls_data[r_shiny_bls_data$OCC_TITLE == input$metric,]) %>%
       clearShapes() %>%  # Clear older polygons before drawing new colors
       clearControls() %>% # Clear older legends
       addPolygons(
