@@ -72,14 +72,19 @@ server <- function(input, output, session) {
   
     # Select the metric column based on user input
   
+  
+  
+  
   observe({
-
-    #selected_metric <- as.numeric(r_shiny_bls_data$TOT_EMP[r_shiny_bls_data$OCC_TITLE == input$metric])
-    selected_metric <- if ((input$subvalue != "None")){
-      as.numeric(r_shiny_bls_data$TOT_EMP[r_shiny_bls_data$OCC_TITLE == input$subvalue])
-    } else {
-      as.numeric(r_shiny_bls_data$TOT_EMP[r_shiny_bls_data$OCC_TITLE == input$metric])} #this is the problem - input$subvalue
-
+    selected_metric <- as.numeric(r_shiny_bls_data$TOT_EMP[r_shiny_bls_data$OCC_TITLE == input$subvalue])
+    #selected_metric <- as.numeric(r_shiny_bls_data$TOT_EMP[r_shiny_bls_data$OCC_TITLE == input$subvalue])
+    
+    
+    # selected_metric <- if ((input$subvalue == "None")){
+    #   as.numeric(r_shiny_bls_data$TOT_EMP[r_shiny_bls_data$OCC_TITLE == input$metric])
+    #   } else {
+    #   as.numeric(r_shiny_bls_data$TOT_EMP[r_shiny_bls_data$OCC_TITLE == input$metric])} #this is the problem - input$subvalue
+    
     # 1. Define color palette dynamically based on the range of the selected metric
     pal <- colorNumeric(
       palette = "viridis",
@@ -97,6 +102,7 @@ server <- function(input, output, session) {
 
     
     ##create df
+    
 
     # data <- if (input$subvalue == "Select occupation"){
     #   as.numeric(r_shiny_bls_data$TOT_EMP[r_shiny_bls_data$OCC_TITLE == input$metric])

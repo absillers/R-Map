@@ -11,7 +11,7 @@ fulldf <- data.frame(
 
 ui <- fluidPage(
   fluidRow(
-    #column(4, selectInput("country", "Country", sort(unique(fulldf$country)))),
+    column(4, selectInput("country", "Country", sort(unique(fulldf$country)))),
     column(4, selectInput("subgroup_var", "Subgroup variable", c("None", "gender", "age"))),
     column(4, selectInput("subgroup_value", "Subgroup value", NULL))
   ),
@@ -27,13 +27,16 @@ server <- function(input, output, session) {
       choices <- fulldf %>% pull(input$subgroup_var) %>% unique()
     }
     updateSelectInput(session, "subgroup_value", choices = choices)
+
   })
 
   filtered_data <- reactive({
     message("calculating data")
     data <- fulldf %>% filter(country == input$country)
     if (input$subgroup_var != "None") {
-      data <- data %>% filter(!!sym(input$subgroup_var) == input$subgroup_value)
+      data <- data %>% 
+        filter(!!sym(input$subgroup_var) == input$subgroup_value)
+    #gender = Male
     }
     data
   }) %>% bindEvent(input$subgroup_value)
