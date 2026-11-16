@@ -72,9 +72,6 @@ server <- function(input, output, session) {
   
     # Select the metric column based on user input
   
-  
-  
-  
   observe({
     if (input$subvalue == 'None'){
     selected_metric <- as.numeric(r_shiny_bls_data$TOT_EMP[r_shiny_bls_data$OCC_TITLE == input$metric])}
@@ -88,8 +85,8 @@ server <- function(input, output, session) {
       reverse = TRUE,
       domain = selected_metric
     )
-
-    # # 2. Build interactive dynamic labels
+    
+    # 2. Build interactive dynamic labels
     labels <- sprintf(
       "<strong>%s</strong><br/>%s: %s",
       r_shiny_bls_data$AREA_TITLE[r_shiny_bls_data$OCC_TITLE == input$metric],
