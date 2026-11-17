@@ -8,7 +8,7 @@ source("r_shiny_data.R", local = TRUE)
 occupations_major <- unique(r_shiny_bls_data$OCC_TITLE[r_shiny_bls_data$OCC_GROUP == 'major'])
 
 data_types <- colnames(r_shiny_bls_data)[which(colnames(r_shiny_bls_data) == "TOT_EMP"):which(colnames(r_shiny_bls_data) == "A_MEDIAN")]
-
+#data_types_names <- c("Total employment", "Jobs per 1,000", )
 
 
 
@@ -36,6 +36,7 @@ ui <- fluidPage(
         inputId = "data_value",
         label = "Choose data:",
         choices = data_types,
+        individual = TRUE, 
         selected = "TOT_EMP",
         status = "primary",
         checkIcon = list(
@@ -90,17 +91,20 @@ server <- function(input, output, session) {
          updateSelectInput(session, "subvalue", choices = c(All = "All", choices))
         })
   
+  
   #find occupation value
   ###########
   ###CHANGE tottemp to different options
   
+  
   observe({
+    data <- input$data_value
     
     if (input$subvalue == 'All'){
-      selected_metric <- as.numeric(r_shiny_bls_data$TOT_EMP[r_shiny_bls_data$OCC_TITLE == input$metric])
+      selected_metric <- as.numeric(r_shiny_bls_data[[data]][r_shiny_bls_data$OCC_TITLE == input$metric])
       occupation <- input$metric}
     else {
-      selected_metric <- as.numeric(r_shiny_bls_data$TOT_EMP[r_shiny_bls_data$OCC_TITLE == input$subvalue])
+      selected_metric <- as.numeric(r_shiny_bls_data[[data]][r_shiny_bls_data$OCC_TITLE == input$subvalue])
       occupation <- input$subvalue}
 
     #Define color palette
