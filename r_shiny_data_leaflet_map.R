@@ -2,19 +2,24 @@ library(shiny)
 library(leaflet)
 library(dplyr)
 library(sf)
-
-#add API
-####BASED OFF LEAFLET_MAP_PERCENT
+library(shinyWidgets)
 
 source("r_shiny_data.R", local = TRUE)
 occupations_major <- unique(r_shiny_bls_data$OCC_TITLE[r_shiny_bls_data$OCC_GROUP == 'major'])
+
+data_types <- colnames(r_shiny_bls_data)[which(colnames(r_shiny_bls_data) == "TOT_EMP"):which(colnames(r_shiny_bls_data) == "A_MEDIAN")]
+
+
+
 
 r_shiny_bls_data <- r_shiny_bls_data %>%
   filter(YEAR == 2023)
 
 # --- USER INTERFACE ---
 ui <- fluidPage(
-  titlePanel("Dynamic R Shiny Leaflet Choropleth"),
+  titlePanel(
+    title = tags$span("Occupation by MSA", style = "font-family: 'Calibri', serif; font-size: 32px;"),
+    ),
   sidebarLayout(
     sidebarPanel(
       selectInput(
@@ -25,7 +30,22 @@ ui <- fluidPage(
       selectInput(
         inputId = "subvalue",
         label = "Select Occupation:",
-        choices = NULL)),
+        choices = NULL),
+      
+      radioGroupButtons(
+        inputId = "data_value",
+        label = "Choose data:",
+        choices = data_types,
+        selected = "TOT_EMP",
+        status = "primary",
+        checkIcon = list(
+          yes = icon("check")
+        )
+      ),
+      verbatimTextOutput("result"),
+      width = 3),
+    
+    
     
     mainPanel(
       leafletOutput(outputId = "map", height = "600px")
@@ -37,17 +57,17 @@ ui <- fluidPage(
 server <- function(input, output, session) {
   
   #base layer
-  url <- paste0(switch(
+  base_map <- paste0(switch(
     'CartoDB', 
     'CartoDB'="https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png",
     'CartoDB.Positron'="https://basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}.png")
     ,'?key=cb1_30r9_1_53870c6197c8ba2546c66893')
   
-  #base map
+  #base map - what is rendered 
   output$map <- renderLeaflet({
     leaflet(r_shiny_bls_data) %>%
       addTiles(
-        urlTemplate = url,
+        urlTemplate = base_map,
         attribution = paste(
           '&copy; <a href="https://carto.com/attributions">CARTO</a>,',
           '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -55,57 +75,57 @@ server <- function(input, output, session) {
       setView(lng = -96, lat = 37.8, zoom = 4) # Centers over the US
   })
   
-  #Dopdropdown menu values - react
+  #Dropdown menu values based on occupation group
   observeEvent(input$metric, {
-      if (input$metric == "None") {
-        choices <- c("")
-      } else {
-        occupation_type_input <- r_shiny_bls_data %>% 
-          filter(OCC_TITLE == input$metric) %>% 
-          pull(OCC_TYPE) %>% unique()
         
-        choices <- r_shiny_bls_data %>% 
-          filter(OCC_TYPE == occupation_type_input & OCC_GROUP == 'detailed') %>% 
-          pull(OCC_TITLE) %>% 
+    occupation_type_input <- r_shiny_bls_data %>%
+          filter(OCC_TITLE == input$metric) %>%
+          pull(OCC_TYPE) %>% unique()
+
+        choices <- r_shiny_bls_data %>%
+          filter(OCC_TYPE == occupation_type_input & OCC_GROUP == 'detailed') %>%
+          pull(OCC_TITLE) %>%
           unique()
-      }
-      updateSelectInput(session, "subvalue", choices = c(All = "All", choices))
+    
+         updateSelectInput(session, "subvalue", choices = c(All = "All", choices))
         })
   
-    # Select the metric column based on user input
+  #find occupation value
+  ###########
+  ###CHANGE tottemp to different options
   
   observe({
+    
     if (input$subvalue == 'All'){
-    selected_metric <- as.numeric(r_shiny_bls_data$TOT_EMP[r_shiny_bls_data$OCC_TITLE == input$metric])
-    map_value <- input$metric}
+      selected_metric <- as.numeric(r_shiny_bls_data$TOT_EMP[r_shiny_bls_data$OCC_TITLE == input$metric])
+      occupation <- input$metric}
     else {
-    selected_metric <- as.numeric(r_shiny_bls_data$TOT_EMP[r_shiny_bls_data$OCC_TITLE == input$subvalue])
-    map_value <- input$subvalue}
+      selected_metric <- as.numeric(r_shiny_bls_data$TOT_EMP[r_shiny_bls_data$OCC_TITLE == input$subvalue])
+      occupation <- input$subvalue}
 
-    # 1. Define color palette dynamically based on the range of the selected metric
+    #Define color palette
     pal <- colorNumeric(
-      palette = "viridis",
-      reverse = TRUE,
+      palette = "Blues",
+      #reverse = TRUE,
       domain = selected_metric
     )
     
-    # 2. Build interactive dynamic labels
+    #Build interactive dynamic labels
     labels <-
-      if (map_value == ''){
+      if (occupation == ''){
         'LABELS'
     } else {
       sprintf(
         "<strong>%s</strong><br/>%s: %s",
-        r_shiny_bls_data$AREA_TITLE[r_shiny_bls_data$OCC_TITLE == map_value],
-        map_value,
+        r_shiny_bls_data$AREA_TITLE[r_shiny_bls_data$OCC_TITLE == occupation],
+        occupation,
         round(selected_metric, 2)) %>% 
         lapply(htmltools::HTML)}
     
     
-    # 3. Update the existing map instance using proxy
-    #what is the point of the data?
+    #Update the existing map instance using proxy
     leafletProxy("map", 
-        data =  r_shiny_bls_data[r_shiny_bls_data$OCC_TITLE == map_value,]) %>%
+        data =  r_shiny_bls_data[r_shiny_bls_data$OCC_TITLE == occupation,]) %>%
       clearShapes() %>%  # Clear older polygons before drawing new colors
       clearControls() %>% # Clear older legends
       addPolygons(
@@ -123,6 +143,7 @@ server <- function(input, output, session) {
           fillOpacity = 1,
           bringToFront = TRUE
         ),
+        
         label = labels,
         labelOptions = labelOptions(
           style = list("font-weight" = "normal", padding = "3px 8px"),
