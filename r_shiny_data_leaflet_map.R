@@ -89,13 +89,22 @@ server <- function(input, output, session) {
     )
     
     # 2. Build interactive dynamic labels
-
-    labels <- sprintf(
+    # labels <- sprintf(
+    #   "<strong>%s</strong><br/>%s: %s",
+    #   r_shiny_bls_data$Area[r_shiny_bls_data$OCC_TITLE == input$metric],
+    #   input$metric,
+    #   round(selected_metric, 2)
+    # ) %>% lapply(htmltools::HTML)
+    
+  if (a == ''){
+    labels  <- 'LABELS'
+    } else {
+      labels <- sprintf(
       "<strong>%s</strong><br/>%s: %s",
       r_shiny_bls_data$AREA_TITLE[r_shiny_bls_data$OCC_TITLE == a],
       a,
       round(selected_metric, 2)
-    ) %>% lapply(htmltools::HTML)
+    ) %>% lapply(htmltools::HTML)}
 
     
     ##create df
