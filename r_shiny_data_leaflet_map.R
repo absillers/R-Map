@@ -35,13 +35,15 @@ ui <- fluidPage(
 
 # --- SERVER LOGIC ---
 server <- function(input, output, session) {
-  # Initialize the base map layer
+  
+  #base layer
   url <- paste0(switch(
     'CartoDB', 
     'CartoDB'="https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png",
     'CartoDB.Positron'="https://basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}.png")
     ,'?key=cb1_30r9_1_53870c6197c8ba2546c66893')
   
+  #base map
   output$map <- renderLeaflet({
     leaflet(r_shiny_bls_data) %>%
       addTiles(
@@ -53,7 +55,7 @@ server <- function(input, output, session) {
       setView(lng = -96, lat = 37.8, zoom = 4) # Centers over the US
   })
   
-  #dropdown menu values - react
+  #Dopdropdown menu values - react
   observeEvent(input$metric, {
       if (input$metric == "None") {
         choices <- c("")
@@ -67,19 +69,18 @@ server <- function(input, output, session) {
           pull(OCC_TITLE) %>% 
           unique()
       }
-      updateSelectInput(session, "subvalue", choices = c(None = "None", choices))
+      updateSelectInput(session, "subvalue", choices = c(All = "All", choices))
         })
   
     # Select the metric column based on user input
   
   observe({
-    if (input$subvalue == 'None'){
+    if (input$subvalue == 'All'){
     selected_metric <- as.numeric(r_shiny_bls_data$TOT_EMP[r_shiny_bls_data$OCC_TITLE == input$metric])
-    a <- input$metric}
+    map_value <- input$metric}
     else {
     selected_metric <- as.numeric(r_shiny_bls_data$TOT_EMP[r_shiny_bls_data$OCC_TITLE == input$subvalue])
-    a <- input$subvalue}
-    print(a)
+    map_value <- input$subvalue}
 
     # 1. Define color palette dynamically based on the range of the selected metric
     pal <- colorNumeric(
@@ -89,30 +90,22 @@ server <- function(input, output, session) {
     )
     
     # 2. Build interactive dynamic labels
-    # labels <- sprintf(
-    #   "<strong>%s</strong><br/>%s: %s",
-    #   r_shiny_bls_data$Area[r_shiny_bls_data$OCC_TITLE == input$metric],
-    #   input$metric,
-    #   round(selected_metric, 2)
-    # ) %>% lapply(htmltools::HTML)
-    
-  if (a == ''){
-    labels  <- 'LABELS'
+    labels <-
+      if (map_value == ''){
+        'LABELS'
     } else {
-      labels <- sprintf(
-      "<strong>%s</strong><br/>%s: %s",
-      r_shiny_bls_data$AREA_TITLE[r_shiny_bls_data$OCC_TITLE == a],
-      a,
-      round(selected_metric, 2)
-    ) %>% lapply(htmltools::HTML)}
-
+      sprintf(
+        "<strong>%s</strong><br/>%s: %s",
+        r_shiny_bls_data$AREA_TITLE[r_shiny_bls_data$OCC_TITLE == map_value],
+        map_value,
+        round(selected_metric, 2)) %>% 
+        lapply(htmltools::HTML)}
     
-    ##create df
     
     # 3. Update the existing map instance using proxy
     #what is the point of the data?
     leafletProxy("map", 
-        data =  r_shiny_bls_data[r_shiny_bls_data$OCC_TITLE == a,]) %>%
+        data =  r_shiny_bls_data[r_shiny_bls_data$OCC_TITLE == map_value,]) %>%
       clearShapes() %>%  # Clear older polygons before drawing new colors
       clearControls() %>% # Clear older legends
       addPolygons(
@@ -137,7 +130,7 @@ server <- function(input, output, session) {
           direction = "auto"
         )
       ) %>%
-      # Add dynamic legend matching the current distribution
+      # Add legend 
       addLegend(
         pal = pal,
         values = ~selected_metric,
