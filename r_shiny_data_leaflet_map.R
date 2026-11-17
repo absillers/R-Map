@@ -74,10 +74,11 @@ server <- function(input, output, session) {
   
   observe({
     if (input$subvalue == 'None'){
-    selected_metric <- as.numeric(r_shiny_bls_data$TOT_EMP[r_shiny_bls_data$OCC_TITLE == input$metric])}
+    selected_metric <- as.numeric(r_shiny_bls_data$TOT_EMP[r_shiny_bls_data$OCC_TITLE == input$metric])
+    a <- input$metric}
     else {
     selected_metric <- as.numeric(r_shiny_bls_data$TOT_EMP[r_shiny_bls_data$OCC_TITLE == input$subvalue])
-    }
+    a <- input$subvalue}
 
     # 1. Define color palette dynamically based on the range of the selected metric
     pal <- colorNumeric(
@@ -87,6 +88,7 @@ server <- function(input, output, session) {
     )
     
     # 2. Build interactive dynamic labels
+  
     labels <- sprintf(
       "<strong>%s</strong><br/>%s: %s",
       r_shiny_bls_data$AREA_TITLE[r_shiny_bls_data$OCC_TITLE == input$metric],
@@ -106,7 +108,7 @@ server <- function(input, output, session) {
     # 3. Update the existing map instance using proxy
     #what is the point of the data?
     leafletProxy("map", 
-        data =  r_shiny_bls_data[r_shiny_bls_data$OCC_TITLE == input$metric,]) %>%
+        data =  r_shiny_bls_data[r_shiny_bls_data$OCC_TITLE == a,]) %>%
       clearShapes() %>%  # Clear older polygons before drawing new colors
       clearControls() %>% # Clear older legends
       addPolygons(
@@ -124,12 +126,12 @@ server <- function(input, output, session) {
           fillOpacity = 1,
           bringToFront = TRUE
         ),
-        label = labels,
-        labelOptions = labelOptions(
-          style = list("font-weight" = "normal", padding = "3px 8px"),
-          textsize = "15px",
-          direction = "auto"
-        )
+        # label = labels,
+        # labelOptions = labelOptions(
+        #   style = list("font-weight" = "normal", padding = "3px 8px"),
+        #   textsize = "15px",
+        #   direction = "auto"
+        # )
       ) %>%
       # Add dynamic legend matching the current distribution
       addLegend(
