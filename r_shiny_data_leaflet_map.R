@@ -8,9 +8,8 @@ source("r_shiny_data.R", local = TRUE)
 occupations_major <- unique(r_shiny_bls_data$OCC_TITLE[r_shiny_bls_data$OCC_GROUP == 'major'])
 
 data_types <- colnames(r_shiny_bls_data)[which(colnames(r_shiny_bls_data) == "TOT_EMP"):which(colnames(r_shiny_bls_data) == "A_MEDIAN")]
-#data_types_names <- c("Total employment", "Jobs per 1,000", )
-
-
+data_types_names <- c("Total employment", "Jobs per 1,000", "Location Quotient", "Hourly Mean (Wage)", "Annual Mean (Wage)", 
+                      "Hourly Median (Wage)", "Hourly Median (Wage)")
 
 r_shiny_bls_data <- r_shiny_bls_data %>%
   filter(YEAR == 2023)
@@ -35,7 +34,8 @@ ui <- fluidPage(
       radioGroupButtons(
         inputId = "data_value",
         label = "Choose data:",
-        choices = data_types,
+        choices = c(setNames(unlist(data_types), unlist(data_types_names))),
+        #choices = data_types,
         individual = TRUE, 
         selected = "TOT_EMP",
         status = "primary",

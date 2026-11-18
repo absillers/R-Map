@@ -3,6 +3,7 @@ library(tidyverse)
 library(dplyr)
 library(sf)
 library(data.table)
+library(fuzzyjoin)
 
 setwd('C:/Users/annas/OneDrive/R-Map')
 
@@ -69,7 +70,26 @@ GEOID <- data.frame(
 GEOID$AREA_TITLE <- gsub("(.*)(\\, \\w\\w)(.*)", "\\1\\2", GEOID$area)
 GEOID <- unique(GEOID[,c(1,6)])
 
+#remove second state from MSA
+r_shiny_bls_data$AREA_TITLE <- gsub("(\\s\\D\\D)(-)(\\D\\D.*)", "\\1", r_shiny_bls_data$AREA_TITLE)
 r_shiny_bls_data <- left_join(r_shiny_bls_data, GEOID, by = "AREA_TITLE") #find the GEOIDs
+
+##still 81 left (including some PR)
+GEOID$no_match <- ifelse(GEOID$GEOID %in% r_shiny_bls_data$GEOID, 1, 0)
+
+GEOID$first_city <- sub("(^[^-]+)(-|,).*", "\\1", GEOID$AREA_TITLE)
+GEOID$first_city <- ifelse(GEOID$no_match == 1, NA, GEOID$first_city)
+GEOID$GEOID_alt <- GEOID$GEOID
+r_shiny_bls_data$first_city <- sub("(^[^-]+)(-|,).*", "\\1", r_shiny_bls_data$AREA_TITLE)
+
+r_shiny_bls_data <- left_join(r_shiny_bls_data, GEOID[c(4,5)], by = "first_city") #find the GEOIDs
+
+r_shiny_bls_data$GEOID <- ifelse(is.na(r_shiny_bls_data$GEOID), r_shiny_bls_data$GEOID_alt, r_shiny_bls_data$GEOID)
+
+r_shiny_bls_data$GEOID[r_shiny_bls_data$AREA_TITLE == "Portsmouth, NH"] <- NA
+r_shiny_bls_data$GEOID[r_shiny_bls_data$AREA_TITLE == "Danbury, CT"] <- 14860
+r_shiny_bls_data$GEOID[r_shiny_bls_data$AREA_TITLE == "The Villages, FL"] <- 48680
+r_shiny_bls_data$GEOID[r_shiny_bls_data$AREA_TITLE == "Prescott, AZ"] <- 39150
 
 #find GEOID
 
@@ -84,4 +104,4 @@ r_shiny_bls_data <- r_shiny_bls_data %>%
 
 r_shiny_bls_data$OCC_TYPE <- substr(r_shiny_bls_data$OCC_CODE, 1, 2)
 
-r_shiny_bls_data$OCC_TITLE <- gsub("Occupations", "", r_shiny_bls_data$OCC_TITLE)
+r_shiny_bls_data$OCC_TITLE <- gsub(" Occupations", "", r_shiny_bls_data$OCC_TITLE)
