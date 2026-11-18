@@ -35,7 +35,6 @@ ui <- fluidPage(
         inputId = "data_value",
         label = "Choose data:",
         choices = c(setNames(unlist(data_types), unlist(data_types_names))),
-        #choices = data_types,
         individual = TRUE, 
         selected = "TOT_EMP",
         status = "primary",
@@ -45,8 +44,6 @@ ui <- fluidPage(
       ),
       verbatimTextOutput("result"),
       width = 3),
-    
-    
     
     mainPanel(
       leafletOutput(outputId = "map", height = "600px")
