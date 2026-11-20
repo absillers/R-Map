@@ -1,0 +1,10 @@
+name: app_bls
+title:
+username: absillers
+account: absillers
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 18482396
+bundleId: 12845861
+url: https://absillers.shinyapps.io/app_bls/
+version: 1
