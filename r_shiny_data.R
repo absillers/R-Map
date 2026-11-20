@@ -80,6 +80,7 @@ GEOID$no_match <- ifelse(GEOID$GEOID %in% r_shiny_bls_data$GEOID, 1, 0)
 GEOID$first_city <- sub("(^[^-]+)(-|,).*", "\\1", GEOID$AREA_TITLE)
 GEOID$first_city <- ifelse(GEOID$no_match == 1, NA, GEOID$first_city)
 GEOID$GEOID_alt <- GEOID$GEOID
+
 r_shiny_bls_data$first_city <- sub("(^[^-]+)(-|,).*", "\\1", r_shiny_bls_data$AREA_TITLE)
 
 r_shiny_bls_data <- left_join(r_shiny_bls_data, GEOID[c(4,5)], by = "first_city") #find the GEOIDs
@@ -93,7 +94,8 @@ r_shiny_bls_data$GEOID[r_shiny_bls_data$AREA_TITLE == "Prescott, AZ"] <- 39150
 
 #find GEOID
 
-my_shapefile <- st_read("C:/Users/annas/OneDrive/Github/plotly_bls_map/cbsa_shape/cb_2025_us_cbsa_500k.shp")
+my_shapefile <- st_read("cb_2025_us_cbsa_500k.shp")
+
 
 #find the polygons
 r_shiny_bls_data <- r_shiny_bls_data %>%
@@ -105,3 +107,9 @@ r_shiny_bls_data <- r_shiny_bls_data %>%
 r_shiny_bls_data$OCC_TYPE <- substr(r_shiny_bls_data$OCC_CODE, 1, 2)
 
 r_shiny_bls_data$OCC_TITLE <- gsub(" Occupations", "", r_shiny_bls_data$OCC_TITLE)
+
+r_shiny_bls_data <- r_shiny_bls_data %>%
+  filter(YEAR == 2023)
+
+#saveRDS(r_shiny_bls_data, file = "r_shiny_bls_data.rds")
+
