@@ -1,0 +1,13 @@
+name: R-Map
+title: R-Map
+username: absillers
+account: absillers
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 18479979
+bundleId: 12841298
+url: https://absillers.shinyapps.io/R-Map/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: fulldf.csv|plotly_msa_employment.csv|practice_leaflet_map_bls.R|r_shiny_bls_data.Rda
