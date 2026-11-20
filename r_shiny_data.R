@@ -113,3 +113,5 @@ r_shiny_bls_data <- r_shiny_bls_data %>%
 
 saveRDS(r_shiny_bls_data, file = "r_shiny_bls_data.rds", compress = 'xz')
 
+#?rsconnect::writeManifest
+
