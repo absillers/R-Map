@@ -6,7 +6,8 @@ library(shinyWidgets)
 
 #source("r_shiny_data.R", local = TRUE)
 
-r_shiny_bls_data <- readRDS('r_shiny_bls_data.rds')
+#r_shiny_bls_data <- readRDS('r_shiny_bls_data.rds')
+
 occupations_major <- unique(r_shiny_bls_data$OCC_TITLE[r_shiny_bls_data$OCC_GROUP == 'major'])
 
 data_types <- colnames(r_shiny_bls_data)[which(colnames(r_shiny_bls_data) == "TOT_EMP"):which(colnames(r_shiny_bls_data) == "A_MEDIAN")]
