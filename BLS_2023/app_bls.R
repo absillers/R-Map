@@ -6,10 +6,7 @@ library(shinyWidgets)
 
 #source("r_shiny_data.R", local = TRUE)
 
-r_shiny_bls_data_1 <- readRDS('data/r_shiny_bls_data_pt1.rds')
-r_shiny_bls_data_2 <- readRDS('data/r_shiny_bls_data_pt2.rds')
-
-r_shiny_bls_data <- cbind(r_shiny_bls_data_1, r_shiny_bls_data_2)
+r_shiny_bls_data <- readRDS('r_shiny_bls_data.rds')
 
 occupations_major <- unique(r_shiny_bls_data$OCC_TITLE[r_shiny_bls_data$OCC_GROUP == 'major'])
 

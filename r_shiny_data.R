@@ -111,6 +111,5 @@ r_shiny_bls_data$OCC_TITLE <- gsub(" Occupations", "", r_shiny_bls_data$OCC_TITL
 r_shiny_bls_data <- r_shiny_bls_data %>%
   filter(YEAR == 2023)
 
-saveRDS(r_shiny_bls_data[,c(1:8)], file = "r_shiny_bls_data_pt1.rds")
-saveRDS(r_shiny_bls_data[,c(9:16)], file = "r_shiny_bls_data_pt2.rds")
+saveRDS(r_shiny_bls_data, file = "r_shiny_bls_data.rds", compress = 'xz')
 
