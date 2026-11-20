@@ -91,7 +91,7 @@ r_shiny_bls_data$GEOID[r_shiny_bls_data$AREA_TITLE == "Portsmouth, NH"] <- NA
 r_shiny_bls_data$GEOID[r_shiny_bls_data$AREA_TITLE == "Danbury, CT"] <- 14860
 r_shiny_bls_data$GEOID[r_shiny_bls_data$AREA_TITLE == "The Villages, FL"] <- 48680
 r_shiny_bls_data$GEOID[r_shiny_bls_data$AREA_TITLE == "Prescott, AZ"] <- 39150
-
+r_shiny_bls_data$GEOID_alt <- NULL
 #find GEOID
 
 my_shapefile <- st_read("cb_2025_us_cbsa_500k.shp")
@@ -111,5 +111,6 @@ r_shiny_bls_data$OCC_TITLE <- gsub(" Occupations", "", r_shiny_bls_data$OCC_TITL
 r_shiny_bls_data <- r_shiny_bls_data %>%
   filter(YEAR == 2023)
 
-#saveRDS(r_shiny_bls_data, file = "r_shiny_bls_data.rds")
+saveRDS(r_shiny_bls_data[,c(1:10)], file = "r_shiny_bls_data_pt1.rds")
+saveRDS(r_shiny_bls_data[,c(11:16)], file = "r_shiny_bls_data_pt2.rds")
 
