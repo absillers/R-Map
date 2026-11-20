@@ -1,0 +1,12 @@
+name: BLS_2023
+title: BLS_2023
+username: absillers
+account: absillers
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 18491501
+bundleId: 12846095
+url: https://absillers.shinyapps.io/BLS_2023/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
