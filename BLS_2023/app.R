@@ -15,14 +15,14 @@ data_types_names <- c("Total employment", "Jobs per 1,000", "Location Quotient",
 # --- USER INTERFACE ---
 ui <- fluidPage(
   titlePanel(
-    title = tags$span("Occupation by MSA", style = "font-family: 'Calibri', serif; font-size: 32px;"),
+    title = tags$span("Occupation by MSA", style = "font-family: 'Calibri', serif; font-size: 32px;")
     ),
   sidebarLayout(
     sidebarPanel(
       selectInput(
         inputId = "metric",
         label = "Select Occupation Group:",
-        choices = c(setNames(unlist(occupations_major), unlist(occupations_major))),
+        choices = c(setNames(unlist(occupations_major), unlist(occupations_major)))
         ),
       selectInput(
         inputId = "subvalue",
@@ -45,7 +45,7 @@ ui <- fluidPage(
       width = 3),
     
     mainPanel(
-      leafletOutput(outputId = "map", height = "600px"),
+      leafletOutput(outputId = "map", height = "600px")
     )
   )
 )
@@ -77,10 +77,12 @@ server <- function(input, output, session) {
         
     occupation_type_input <- r_shiny_bls_data %>%
           filter(OCC_TITLE == input$metric) %>%
+          filter(YEAR == 2023) %>%
           pull(OCC_TYPE) %>% unique()
 
         choices <- r_shiny_bls_data %>%
           filter(OCC_TYPE == occupation_type_input & OCC_GROUP == 'detailed') %>%
+          filter(YEAR == 2023) %>%
           pull(OCC_TITLE) %>%
           unique()
     
@@ -97,12 +99,27 @@ server <- function(input, output, session) {
     data <- input$data_value
     
     if (input$subvalue == 'All'){
-      selected_metric <- as.numeric(r_shiny_bls_data[[data]][r_shiny_bls_data$OCC_TITLE == input$metric])
+      selected_metric <- r_shiny_bls_data %>% 
+        st_drop_geometry() %>%
+        filter(OCC_TITLE == input$metric) %>%
+        filter(YEAR == 2023) %>%
+        select(all_of(data)) %>%
+        unlist() %>%
+        as.numeric()
+      
+
       occupation <- input$metric}
     else {
-      selected_metric <- as.numeric(r_shiny_bls_data[[data]][r_shiny_bls_data$OCC_TITLE == input$subvalue])
+      selected_metric <- r_shiny_bls_data %>% 
+        st_drop_geometry() %>%
+        filter(OCC_TITLE == input$subvalue) %>%
+        filter(YEAR == 2023) %>%
+        select(all_of(data)) %>%
+        unlist() %>%
+        as.numeric()
+      
       occupation <- input$subvalue}
-
+    
     #Define color palette
     pal <- colorNumeric(
       palette = "GnBu",
@@ -125,7 +142,10 @@ server <- function(input, output, session) {
     
     #Update the existing map instance using proxy
     leafletProxy("map", 
-        data =  r_shiny_bls_data[r_shiny_bls_data$OCC_TITLE == occupation,]) %>%
+      data = r_shiny_bls_data[r_shiny_bls_data$OCC_TITLE == occupation,])
+        # data =  r_shiny_bls_data %>%
+        #   filter(OCC_TITLE == occupation)) 
+      %>%
       clearShapes() %>%  # Clear older polygons before drawing new colors
       clearControls() %>% # Clear older legends
       addPolygons(

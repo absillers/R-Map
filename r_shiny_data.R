@@ -108,9 +108,6 @@ r_shiny_bls_data$OCC_TYPE <- substr(r_shiny_bls_data$OCC_CODE, 1, 2)
 
 r_shiny_bls_data$OCC_TITLE <- gsub(" Occupations", "", r_shiny_bls_data$OCC_TITLE)
 
-r_shiny_bls_data <- r_shiny_bls_data %>%
-  filter(YEAR == 2023)
-
 #saveRDS(r_shiny_bls_data, file = "r_shiny_bls_data.rds", compress = 'xz')
 
 #rsconnect::writeManifest()
