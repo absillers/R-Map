@@ -4,8 +4,6 @@ library(dplyr)
 library(sf)
 library(shinyWidgets)
 
-#source("r_shiny_data.R", local = TRUE)
-
 r_shiny_bls_data <- readRDS('r_shiny_bls_data.rds')
 
 occupations_major <- unique(r_shiny_bls_data$OCC_TITLE[r_shiny_bls_data$OCC_GROUP == 'major'])
@@ -43,10 +41,11 @@ ui <- fluidPage(
         )
       ),
       verbatimTextOutput("result"),
+      verbatimTextOutput("click_info"),
       width = 3),
     
     mainPanel(
-      leafletOutput(outputId = "map", height = "600px")
+      leafletOutput(outputId = "map", height = "600px"),
     )
   )
 )
@@ -144,7 +143,7 @@ server <- function(input, output, session) {
           fillOpacity = .8,
           bringToFront = TRUE
         ),
-        
+        layerId = ~GEOID,
         label = labels,
         labelOptions = labelOptions(
           style = list("font-weight" = "normal", padding = "3px 8px"),
@@ -160,7 +159,20 @@ server <- function(input, output, session) {
         title = input$metric,
         position = "bottomright"
       )})
-}
+  
+  observeEvent(input$map_shape_click, {
+    click <- input$map_shape_click
+    
+    output$click_info <- renderPrint({
+      list(
+        clicked_polygon_id = click$id,
+        latitude = click$lat
+      )
+      
+    })
+  })
+  
+ }
 
 # Run the Application 
 shinyApp(ui = ui, server = server)
