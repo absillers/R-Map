@@ -108,6 +108,9 @@ r_shiny_bls_data$OCC_TYPE <- substr(r_shiny_bls_data$OCC_CODE, 1, 2)
 
 r_shiny_bls_data$OCC_TITLE <- gsub(" Occupations", "", r_shiny_bls_data$OCC_TITLE)
 
-#saveRDS(r_shiny_bls_data, file = "r_shiny_bls_data.rds", compress = 'xz')
+saveRDS(r_shiny_bls_data, file = "C:/Users/annas/OneDrive/R-Map/BLS_2023/r_shiny_bls_data.rds", compress = 'xz')
 
 #rsconnect::writeManifest()
+
+
+#shiny::runApp("C:/Users/annas/OneDrive/R-Map/BLS_2023/app.R")

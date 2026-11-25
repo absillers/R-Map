@@ -4,7 +4,9 @@ library(dplyr)
 library(sf)
 library(shinyWidgets)
 
-r_shiny_bls_data <- readRDS('r_shiny_bls_data.rds')
+#data not woring - 
+
+r_shiny_bls_data <- readRDS("C:/Users/annas/OneDrive/R-Map/BLS_2023/r_shiny_bls_data.rds")
 
 occupations_major <- unique(r_shiny_bls_data$OCC_TITLE[r_shiny_bls_data$OCC_GROUP == 'major'])
 
@@ -28,12 +30,12 @@ ui <- fluidPage(
         inputId = "subvalue",
         label = "Select Occupation:",
         choices = NULL),
-      
+
       radioGroupButtons(
         inputId = "data_value",
         label = "Choose data:",
         choices = c(setNames(unlist(data_types), unlist(data_types_names))),
-        individual = TRUE, 
+        individual = TRUE,
         selected = "TOT_EMP",
         status = "primary",
         checkIcon = list(
@@ -43,7 +45,7 @@ ui <- fluidPage(
       verbatimTextOutput("result"),
       verbatimTextOutput("click_info"),
       width = 3),
-    
+
     mainPanel(
       leafletOutput(outputId = "map", height = "600px")
     )
@@ -52,15 +54,15 @@ ui <- fluidPage(
 
 # --- SERVER LOGIC ---
 server <- function(input, output, session) {
-  
+
   #base layer
   base_map <- paste0(switch(
-    'CartoDB', 
+    'CartoDB',
     'CartoDB'="https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png",
     'CartoDB.Positron'="https://basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}.png")
     ,'?key=cb1_30r9_1_53870c6197c8ba2546c66893')
-  
-  #base map - what is rendered 
+
+  #base map - what is rendered
   output$map <- renderLeaflet({
     leaflet(r_shiny_bls_data) %>%
       addTiles(
@@ -71,10 +73,10 @@ server <- function(input, output, session) {
         )) %>%
       setView(lng = -96, lat = 37.8, zoom = 4) # Centers over the US
   })
-  
+
   #Dropdown menu values based on occupation group
   observeEvent(input$metric, {
-        
+
     occupation_type_input <- r_shiny_bls_data %>%
           filter(OCC_TITLE == input$metric) %>%
           filter(YEAR == 2023) %>%
@@ -85,48 +87,51 @@ server <- function(input, output, session) {
           filter(YEAR == 2023) %>%
           pull(OCC_TITLE) %>%
           unique()
-    
+
          updateSelectInput(session, "subvalue", choices = c(All = "All", choices))
         })
-  
-  
+
+
   #find occupation value
   ###########
   ###CHANGE tottemp to different options
-  
-  
+
+
   observe({
     data <- input$data_value
-    
+
     if (input$subvalue == 'All'){
-      selected_metric <- r_shiny_bls_data %>% 
+      #selected_metric <- as.numeric(r_shiny_bls_data[[data]][r_shiny_bls_data$OCC_TITLE == input$metric])
+      selected_metric <- r_shiny_bls_data %>%
         st_drop_geometry() %>%
         filter(OCC_TITLE == input$metric) %>%
         filter(YEAR == 2023) %>%
         select(all_of(data)) %>%
         unlist() %>%
         as.numeric()
-      
+
 
       occupation <- input$metric}
     else {
-      selected_metric <- r_shiny_bls_data %>% 
+      #selected_metric <- as.numeric(r_shiny_bls_data[[data]][r_shiny_bls_data$OCC_TITLE == input$subvalue])
+
+      selected_metric <- r_shiny_bls_data %>%
         st_drop_geometry() %>%
         filter(OCC_TITLE == input$subvalue) %>%
         filter(YEAR == 2023) %>%
         select(all_of(data)) %>%
         unlist() %>%
         as.numeric()
-      
+
       occupation <- input$subvalue}
-    
+
     #Define color palette
     pal <- colorNumeric(
       palette = "GnBu",
       #reverse = TRUE,
       domain = selected_metric
     )
-    
+
     #Build interactive dynamic labels
     labels <-
       if (occupation == ''){
@@ -136,16 +141,15 @@ server <- function(input, output, session) {
         "<strong>%s</strong><br/>%s: %s",
         r_shiny_bls_data$AREA_TITLE[r_shiny_bls_data$OCC_TITLE == occupation],
         occupation,
-        round(selected_metric, 2)) %>% 
+        round(selected_metric, 2)) %>%
         lapply(htmltools::HTML)}
-    
-    
+
+
     #Update the existing map instance using proxy
-    leafletProxy("map", 
-      data = r_shiny_bls_data[r_shiny_bls_data$OCC_TITLE == occupation,])
-        # data =  r_shiny_bls_data %>%
-        #   filter(OCC_TITLE == occupation)) 
-      %>%
+    leafletProxy("map",
+      #data = r_shiny_bls_data[r_shiny_bls_data$OCC_TITLE == occupation,])
+        data =  r_shiny_bls_data %>%
+          filter(OCC_TITLE == occupation)) %>%
       clearShapes() %>%  # Clear older polygons before drawing new colors
       clearControls() %>% # Clear older legends
       addPolygons(
@@ -171,7 +175,7 @@ server <- function(input, output, session) {
           direction = "auto"
         )
       ) %>%
-      # Add legend 
+      # Add legend
       addLegend(
         pal = pal,
         values = ~selected_metric,
@@ -179,21 +183,21 @@ server <- function(input, output, session) {
         title = input$metric,
         position = "bottomright"
       )})
-  
+
   observeEvent(input$map_shape_click, {
     click <- input$map_shape_click
-    
+
     output$click_info <- renderPrint({
       list(
         clicked_polygon_id = click$id,
         latitude = click$lat
       )
-      
+
     })
   })
-  
+
  }
 
-# Run the Application 
+# Run the Application
 shinyApp(ui = ui, server = server)
 #rsconnect::deployApp(appPrimaryDoc = "app_bls.R", appDir = "C:/Users/annas/OneDrive/R-Map/BLS_2023")
