@@ -4,7 +4,7 @@ library(dplyr)
 library(sf)
 library(shinyWidgets)
 
-#data not woring - 
+#2024 data
 
 r_shiny_bls_data <- readRDS("C:/Users/annas/OneDrive/R-Map/BLS_2023/r_shiny_bls_data.rds")
 
@@ -79,12 +79,12 @@ server <- function(input, output, session) {
 
     occupation_type_input <- r_shiny_bls_data %>%
           filter(OCC_TITLE == input$metric) %>%
-          filter(YEAR == 2023) %>%
+          #filter(YEAR == 2023) %>%
           pull(OCC_TYPE) %>% unique()
 
         choices <- r_shiny_bls_data %>%
           filter(OCC_TYPE == occupation_type_input & OCC_GROUP == 'detailed') %>%
-          filter(YEAR == 2023) %>%
+          #filter(YEAR == 2023) %>%
           pull(OCC_TITLE) %>%
           unique()
 
@@ -93,17 +93,14 @@ server <- function(input, output, session) {
 
 
   #find occupation value
-  ###########
-  ###CHANGE tottemp to different options
-
 
   observe({
     data <- input$data_value
-    r_shiny_bls_data <- r_shiny_bls_data %>%
-      filter(YEAR == 2023)
+    
+    #r_shiny_bls_data <- r_shiny_bls_data %>%
+      #filter(YEAR == 2023)
 
     if (input$subvalue == 'All'){
-      
       
       selected_metric <- r_shiny_bls_data %>%
         filter(OCC_TITLE == input$metric) %>%
@@ -111,7 +108,6 @@ server <- function(input, output, session) {
         select(all_of(data)) %>%
         unlist() %>%
         as.numeric()
-
 
       occupation <- input$metric}
     else {
@@ -147,7 +143,6 @@ server <- function(input, output, session) {
 
     #Update the existing map instance using proxy
     leafletProxy("map",
-      #data = r_shiny_bls_data[r_shiny_bls_data$OCC_TITLE == occupation,])
         data =  r_shiny_bls_data %>%
           filter(OCC_TITLE == occupation)) %>%
       clearShapes() %>%  # Clear older polygons before drawing new colors

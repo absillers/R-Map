@@ -33,12 +33,14 @@ for (i in c(1:9)){
 }
 
 #dfs <- list(MSA_2016, MSA_2017, MSA_2018, MSA_2019, MSA_2020, MSA_2021, MSA_2022, MSA_2023, MSA_2024)
-dfs <- list(MSA_2022, MSA_2023)
+#dfs <- list(MSA_2022, MSA_2023)
 
 
 ###
 
-r_shiny_bls_data <- do.call(rbind, dfs)
+#r_shiny_bls_data <- do.call(rbind, dfs)
+r_shiny_bls_data <- MSA_2024
+
 
 #add shapefile data
 census_url <- "https://www2.census.gov/programs-surveys/cbp/technical-documentation/reference/metro-area-geography-reference/msa_county_reference22.txt"
@@ -111,6 +113,5 @@ r_shiny_bls_data$OCC_TITLE <- gsub(" Occupations", "", r_shiny_bls_data$OCC_TITL
 saveRDS(r_shiny_bls_data, file = "C:/Users/annas/OneDrive/R-Map/BLS_2023/r_shiny_bls_data.rds", compress = 'xz')
 
 #rsconnect::writeManifest()
-
 
 #shiny::runApp("C:/Users/annas/OneDrive/R-Map/BLS_2023/app.R")
