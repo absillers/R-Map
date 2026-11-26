@@ -99,13 +99,15 @@ server <- function(input, output, session) {
 
   observe({
     data <- input$data_value
+    r_shiny_bls_data <- r_shiny_bls_data %>%
+      filter(YEAR == 2023)
 
     if (input$subvalue == 'All'){
-      #selected_metric <- as.numeric(r_shiny_bls_data[[data]][r_shiny_bls_data$OCC_TITLE == input$metric])
+      
+      
       selected_metric <- r_shiny_bls_data %>%
-        st_drop_geometry() %>%
         filter(OCC_TITLE == input$metric) %>%
-        filter(YEAR == 2023) %>%
+        st_drop_geometry() %>%
         select(all_of(data)) %>%
         unlist() %>%
         as.numeric()
@@ -113,12 +115,10 @@ server <- function(input, output, session) {
 
       occupation <- input$metric}
     else {
-      #selected_metric <- as.numeric(r_shiny_bls_data[[data]][r_shiny_bls_data$OCC_TITLE == input$subvalue])
 
       selected_metric <- r_shiny_bls_data %>%
-        st_drop_geometry() %>%
         filter(OCC_TITLE == input$subvalue) %>%
-        filter(YEAR == 2023) %>%
+        st_drop_geometry() %>%
         select(all_of(data)) %>%
         unlist() %>%
         as.numeric()
