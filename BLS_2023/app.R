@@ -45,10 +45,14 @@ ui <- fluidPage(
       verbatimTextOutput("result"),
       verbatimTextOutput("click_info"),
       width = 3),
-
-    mainPanel(
-      leafletOutput(outputId = "map", height = "600px")
+  
+    fluidRow(
+      column(width = 6, leafletOutput(outputId = "map")),
+      column(width = 6, leafletOutput(outputId = "chart"))
     )
+    # mainPanel(
+    #   leafletOutput(outputId = "map", height = "500px")
+    # )
   )
 )
 
@@ -97,9 +101,6 @@ server <- function(input, output, session) {
   observe({
     data <- input$data_value
     
-    #r_shiny_bls_data <- r_shiny_bls_data %>%
-      #filter(YEAR == 2023)
-
     if (input$subvalue == 'All'){
       
       selected_metric <- r_shiny_bls_data %>%
@@ -181,15 +182,27 @@ server <- function(input, output, session) {
 
   observeEvent(input$map_shape_click, {
     click <- input$map_shape_click
-
-    output$click_info <- renderPrint({
-      list(
-        clicked_polygon_id = click$id,
-        latitude = click$lat
-      )
-
+    clicked_polygon_geoid = click$id
+    # output$click_info <- renderPrint({
+    #   list(
+    #     clicked_polygon_geoid = click$id,
+    #   )
+    # 
+    # })
     })
-  })
+  
+  # 
+  # output$chart <- renderPlotly({
+  # 
+  #   r_shiny_bls_data <- r_shiny_bls_data %>%
+  #     filter(GEOID == clicked_polygon_geoid) %>%
+  #     filter(grepl("11-", OCC_CODE))
+  # 
+  #   plot_ly(data = r_shiny_bls_data_ab_tx %>% filter(OCC_TITLE != 'Management'), labels = ~OCC_TITLE, values = ~TOT_EMP, type = 'pie',
+  #           insidetextorientation = 'radial')
+  # 
+  # })
+  
 
  }
 
