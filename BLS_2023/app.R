@@ -211,20 +211,6 @@ server <- function(input, output, session) {
   })
     
 
-  
-  # 
-  # output$chart <- renderPlotly({
-  # 
-  #   r_shiny_bls_data <- r_shiny_bls_data %>%
-  #     filter(GEOID == clicked_polygon_geoid) %>%
-  #     filter(grepl("11-", OCC_CODE))
-  # 
-  #   plot_ly(data = r_shiny_bls_data_ab_tx %>% filter(OCC_TITLE != 'Management'), labels = ~OCC_TITLE, values = ~TOT_EMP, type = 'pie',
-  #           insidetextorientation = 'radial')
-  # 
-  # })
-  
-
  }
 
 # Run the Application
