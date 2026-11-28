@@ -3,6 +3,11 @@ library(leaflet)
 library(dplyr)
 library(sf)
 library(shinyWidgets)
+library(plotly)
+
+#replace plotly when new county chosen /when new index
+#
+
 
 #2024 data
 
@@ -48,7 +53,7 @@ ui <- fluidPage(
   
     fluidRow(
       column(width = 6, leafletOutput(outputId = "map")),
-      column(width = 6, leafletOutput(outputId = "chart"))
+      column(width = 6, plotlyOutput(outputId = "chart"))
     )
     # mainPanel(
     #   leafletOutput(outputId = "map", height = "500px")
@@ -183,13 +188,29 @@ server <- function(input, output, session) {
   observeEvent(input$map_shape_click, {
     click <- input$map_shape_click
     clicked_polygon_geoid = click$id
-    # output$click_info <- renderPrint({
-    #   list(
-    #     clicked_polygon_geoid = click$id,
-    #   )
-    # 
-    # })
+    
+    code <- r_shiny_bls_data %>%
+      st_drop_geometry() %>%
+      filter(OCC_TITLE == input$metric) %>%
+      select(OCC_CODE) %>%
+      unique() %>%
+      substr(1, 3)
+
+    output$chart <- renderPlotly({
+      
+      r_shiny_bls_data_plot <- r_shiny_bls_data %>%
+        st_drop_geometry() %>%
+        filter(GEOID == clicked_polygon_geoid) %>%
+        filter(OCC_GROUP == 'detailed') %>%
+        filter(grepl(code, OCC_CODE))
+      
+      plot_ly(data = r_shiny_bls_data_plot, labels = ~OCC_TITLE, values = ~TOT_EMP, type = 'pie',
+              insidetextorientation = 'radial')
+
     })
+  })
+    
+
   
   # 
   # output$chart <- renderPlotly({
